@@ -19,3 +19,8 @@ use Illuminate\Http\Request;
 
 
 Route::post('login', 'JWTController@login');
+Route::post('registrasi', 'JWTController@registrasi');
+
+Route::group(['middleware' => 'auth.jwt'], function () {
+    Route::get('profil', 'JWTController@profil');
+});

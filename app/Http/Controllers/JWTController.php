@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use JWTAuth;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Facade\FlareClient\Http\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 class JWTController extends Controller
@@ -34,5 +37,34 @@ class JWTController extends Controller
             'success' => true,
             'token' => $token,
         ]);
+    }
+
+    public function registrasi(Request $request)
+    {
+        $daftar = new User();
+        $daftar->name = $request->name;
+        $daftar->email = $request->email;
+        $daftar->password = bcrypt($request->password);
+        $daftar->save();
+
+
+        if ($daftar) {
+            return response()->json([
+                'success' => true,
+                'data' => $daftar
+            ], 200);
+        }
+    }
+
+    public function profil()
+    {
+
+        $response = [
+            "success" => true,
+            "data" => Auth::user()
+        ];
+
+        return response()
+            ->json($response);
     }
 }
